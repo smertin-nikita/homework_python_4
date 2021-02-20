@@ -11,39 +11,27 @@ directories = {
 
 
 def get_documents(number):
-    '''
-    Возращет список документов
-    '''
+    """ Возращет список документов """
     return list(filter(lambda x: x['number'] == number, documents))
 
 
 def print_people(number):
-    '''
-    Выводит на экран все имена с нормером паспорта = number
-    '''
-    for item in get_documents(number):
-        print(item['name'])
+    """ Возвращает все имена с нормером паспорта = number """
+    return [item['name'] for item in get_documents(number)]
 
 
 def get_shelfs(number):
-    '''
-    Возращет все номера полок которые содержат number документа
-    '''
+    """ Возращет все номера полок которые содержат number документа """
     return [key for key, value in directories.items() if number in value]
 
 
-def print_documents():
-    '''
-    Выводит на экран все докумены
-    '''
-    for item in documents:
-        print(*item.values())
+def get_all_documents():
+    """  Возвращает все докумены """
+    return [item.values() for item in documents]
 
 
 def add_document(type_doc, number, name, shelf_num):
-    '''
-    Добавляет новый документ. Возращет True если документ добавился
-    '''
+    """ Добавляет новый документ. Возращет True если документ добавился """
     if shelf_num in directories:
         documents.append({"type": type_doc, "number": number, "name": name})
         directories[shelf_num].append(number)
@@ -53,9 +41,7 @@ def add_document(type_doc, number, name, shelf_num):
 
 
 def del_documents(number):
-    '''
-    Удоляет документы с number. Возращет True если документы удалились
-    '''
+    """ Удоляет документы с number. Возращет True если документы удалились """
     if len(get_documents(number)):
         for item in get_documents(number):
             documents.remove(item)
@@ -67,9 +53,7 @@ def del_documents(number):
 
 
 def move_document(number, shelf_num):
-    '''
-    Перемещает документы с number на другую полку. Возращет True если документы переместились
-    '''
+    """ Перемещает документы с number на другую полку. Возращет True если документы переместились """
     if (shelf_num in directories) and len(get_documents(number)):
         for item in get_shelfs(number):
             directories[item].remove(number)
@@ -79,10 +63,8 @@ def move_document(number, shelf_num):
         return False
 
 
-def add_shilf(shelf_num):
-    '''
-    Создает новую полку с number . Возращет True если полка создана
-    '''
+def add_shelf(shelf_num):
+    """ Создает новую полку с number . Возращет True если полка создана """
     if shelf_num not in directories:
         directories[shelf_num] = []
         return True
@@ -93,11 +75,11 @@ def add_shilf(shelf_num):
 commands = {
     'p': (print_people, ['10006']),
     's': (get_shelfs, ['1']),
-    'l': (print_documents, []),
+    'l': (get_all_documents, []),
     'a': (add_document, ['passport', '1', 'Иван Петров', '3']),
     'd': (del_documents, ['1']),
     'm': (move_document, ['11-2', '3']),
-    'as': (add_shilf, ['3'])
+    'as': (add_shelf, ['3'])
 }
 
 
@@ -106,7 +88,7 @@ def test():
         print(command.__doc__)
         print(command(*args))
         print('------------ Докумены -----------')
-        print_documents()
+        get_all_documents()
         print('------------- Полки -------------')
         print(directories)
         print('-------------------------------')
@@ -126,7 +108,7 @@ def user_interface():
             print(get_shelfs(input()))
 
         elif command == 'l':
-            print_documents()
+            get_all_documents()
 
         elif command == 'a':
             print('Введите номер документа!')
@@ -158,7 +140,7 @@ def user_interface():
         elif command == 'as':
             print('Введите номер полки!')
             shelf_num = input()
-            if not add_shilf(shelf_num):
+            if not add_shelf(shelf_num):
                 print(f'Полка {shelf_num} уже существует!')
 
         elif command == 'help':
@@ -171,5 +153,6 @@ def user_interface():
             break
 
 
-test()
+if __name__ == '__main__':
+    test()
 # user_interface()
