@@ -1,2 +1,1 @@
-
-class TestAcounting
+pytest
