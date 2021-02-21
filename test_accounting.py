@@ -8,12 +8,20 @@ class TestAccounting:
         self.number = '1111 111111'
         self.name = 'Name Name'
         self.shelf = '4'
+        print('start')
 
-    def test_add_shelf(self):
+    def test_add_shelf_passes(self):
+        """ add_shelf() должен вернуть True если s """
         assert accounting.add_shelf(self.shelf)
 
-    def test_add_document(self):
+    def test_add_shelf_fails(self):
+        assert not accounting.add_shelf(self.shelf)
+
+    def test_add_document_passes(self):
         assert accounting.add_document(self.type, self.number, self.name, self.shelf)
+
+    def test_add_documents_fails(self):
+        assert not accounting.add_document(self.type, self.number, self.name, self.shelf)
 
     def test_get_documents(self):
         assert accounting.get_documents(self.number)
